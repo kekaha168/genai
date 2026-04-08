@@ -1,0 +1,150 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {};
+	objectVersion = 56;
+	objects = {
+
+/* PBXBuildFile */
+B001 /* ANELabApp.swift */                 = {isa=PBXBuildFile; fileRef=F001;};
+B002 /* ANEModels.swift */                 = {isa=PBXBuildFile; fileRef=F002;};
+B003 /* AppStore.swift */                  = {isa=PBXBuildFile; fileRef=F003;};
+B004 /* InferenceEngine.swift */           = {isa=PBXBuildFile; fileRef=F004;};
+B005 /* RootView.swift */                  = {isa=PBXBuildFile; fileRef=F005;};
+B006 /* SharedComponents.swift */          = {isa=PBXBuildFile; fileRef=F006;};
+B007 /* RunnerTab.swift */                 = {isa=PBXBuildFile; fileRef=F007;};
+B008 /* BenchmarkTab.swift */              = {isa=PBXBuildFile; fileRef=F008;};
+B009 /* InspectorTab.swift */              = {isa=PBXBuildFile; fileRef=F009;};
+B010 /* MonitorTab.swift */                = {isa=PBXBuildFile; fileRef=F010;};
+B011 /* DeviceTab.swift */                 = {isa=PBXBuildFile; fileRef=F011;};
+
+/* PBXFileReference */
+F001 = {isa=PBXFileReference; lastKnownFileType=sourcecode.swift; path=ANELabApp.swift;               sourceTree="<group>";};
+F002 = {isa=PBXFileReference; lastKnownFileType=sourcecode.swift; path=ANEModels.swift;               sourceTree="<group>";};
+F003 = {isa=PBXFileReference; lastKnownFileType=sourcecode.swift; path=AppStore.swift;                sourceTree="<group>";};
+F004 = {isa=PBXFileReference; lastKnownFileType=sourcecode.swift; path=InferenceEngine.swift;         sourceTree="<group>";};
+F005 = {isa=PBXFileReference; lastKnownFileType=sourcecode.swift; path=RootView.swift;                sourceTree="<group>";};
+F006 = {isa=PBXFileReference; lastKnownFileType=sourcecode.swift; path=SharedComponents.swift;        sourceTree="<group>";};
+F007 = {isa=PBXFileReference; lastKnownFileType=sourcecode.swift; path=RunnerTab.swift;               sourceTree="<group>";};
+F008 = {isa=PBXFileReference; lastKnownFileType=sourcecode.swift; path=BenchmarkTab.swift;            sourceTree="<group>";};
+F009 = {isa=PBXFileReference; lastKnownFileType=sourcecode.swift; path=InspectorTab.swift;            sourceTree="<group>";};
+F010 = {isa=PBXFileReference; lastKnownFileType=sourcecode.swift; path=MonitorTab.swift;              sourceTree="<group>";};
+F011 = {isa=PBXFileReference; lastKnownFileType=sourcecode.swift; path=DeviceTab.swift;               sourceTree="<group>";};
+PROD = {isa=PBXFileReference; explicitFileType=wrapper.application; includeInIndex=0; path=ANELab.app; sourceTree=BUILT_PRODUCTS_DIR;};
+
+/* PBXGroup */
+ROOT = {isa=PBXGroup; children=(SRC, PRODGRP); sourceTree="<group>";};
+SRC  = {isa=PBXGroup; children=(F001,MGRP,EGRP,VGRP); path=ANELab; sourceTree="<group>";};
+MGRP = {isa=PBXGroup; children=(F002,F003); name=Models; sourceTree="<group>";};
+EGRP = {isa=PBXGroup; children=(F004);      name=Engine; sourceTree="<group>";};
+VGRP = {isa=PBXGroup; children=(F005,CGRP,TGRP); name=Views; sourceTree="<group>";};
+CGRP = {isa=PBXGroup; children=(F006); name=Components; sourceTree="<group>";};
+TGRP = {isa=PBXGroup; children=(F007,F008,F009,F010,F011); name=Tabs; sourceTree="<group>";};
+PRODGRP = {isa=PBXGroup; children=(PROD); name=Products; sourceTree="<group>";};
+
+/* PBXNativeTarget */
+TARGET = {
+    isa=PBXNativeTarget;
+    buildConfigurationList=CFGLIST;
+    buildPhases=(SRCPHASE);
+    buildRules=();
+    dependencies=();
+    name=ANELab;
+    productName=ANELab;
+    productReference=PROD;
+    productType="com.apple.product-type.application";
+};
+
+/* PBXProject */
+PROJECT = {
+    isa=PBXProject;
+    attributes={
+        BuildIndependentTargetsInParallel=1;
+        LastSwiftUpdateCheck=1500;
+        TargetAttributes={TARGET={CreatedOnToolsVersion=15.0;};};
+    };
+    buildConfigurationList=PROJCFGLIST;
+    compatibilityVersion="Xcode 14.0";
+    developmentRegion=en;
+    hasScannedForEncodings=0;
+    knownRegions=(en,Base);
+    mainGroup=ROOT;
+    productRefGroup=PRODGRP;
+    projectDirPath="";
+    projectRoot="";
+    targets=(TARGET);
+};
+
+/* PBXSourcesBuildPhase */
+SRCPHASE = {
+    isa=PBXSourcesBuildPhase;
+    buildActionMask=2147483647;
+    files=(B001,B002,B003,B004,B005,B006,B007,B008,B009,B010,B011);
+    runOnlyForDeploymentPostprocessing=0;
+};
+
+/* XCBuildConfiguration */
+DBGCFG = {
+    isa=XCBuildConfiguration;
+    buildSettings={
+        CLANG_ENABLE_OBJC_ARC=YES;
+        DEBUG_INFORMATION_FORMAT=dwarf;
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS=DEBUG;
+        SWIFT_OPTIMIZATION_LEVEL="-Onone";
+        MTL_FAST_MATH=YES;
+    };
+    name=Debug;
+};
+RELCFG = {
+    isa=XCBuildConfiguration;
+    buildSettings={
+        CLANG_ENABLE_OBJC_ARC=YES;
+        DEBUG_INFORMATION_FORMAT="dwarf-with-dsym";
+        SWIFT_COMPILATION_MODE=wholemodule;
+        SWIFT_OPTIMIZATION_LEVEL="-O";
+        MTL_FAST_MATH=YES;
+    };
+    name=Release;
+};
+TDBG = {
+    isa=XCBuildConfiguration;
+    buildSettings={
+        GENERATE_INFOPLIST_FILE=YES;
+        IPHONEOS_DEPLOYMENT_TARGET=17.0;
+        MACOSX_DEPLOYMENT_TARGET=14.0;
+        LD_RUNPATH_SEARCH_PATHS=("$(inherited)","@executable_path/Frameworks");
+        MARKETING_VERSION=1.0;
+        CURRENT_PROJECT_VERSION=1;
+        PRODUCT_BUNDLE_IDENTIFIER=com.anelab.app;
+        PRODUCT_NAME=ANELab;
+        SWIFT_VERSION=5.9;
+        TARGETED_DEVICE_FAMILY="1,2";
+        SUPPORTS_MACCATALYST=YES;
+    };
+    name=Debug;
+};
+TREL = {
+    isa=XCBuildConfiguration;
+    buildSettings={
+        GENERATE_INFOPLIST_FILE=YES;
+        IPHONEOS_DEPLOYMENT_TARGET=17.0;
+        MACOSX_DEPLOYMENT_TARGET=14.0;
+        LD_RUNPATH_SEARCH_PATHS=("$(inherited)","@executable_path/Frameworks");
+        MARKETING_VERSION=1.0;
+        CURRENT_PROJECT_VERSION=1;
+        PRODUCT_BUNDLE_IDENTIFIER=com.anelab.app;
+        PRODUCT_NAME=ANELab;
+        SWIFT_VERSION=5.9;
+        TARGETED_DEVICE_FAMILY="1,2";
+        SUPPORTS_MACCATALYST=YES;
+    };
+    name=Release;
+};
+
+/* XCConfigurationList */
+PROJCFGLIST = {isa=XCConfigurationList; buildConfigurations=(DBGCFG,RELCFG); defaultConfigurationIsVisible=0; defaultConfigurationName=Release;};
+CFGLIST     = {isa=XCConfigurationList; buildConfigurations=(TDBG,TREL);     defaultConfigurationIsVisible=0; defaultConfigurationName=Release;};
+
+	};
+	rootObject = PROJECT;
+}
