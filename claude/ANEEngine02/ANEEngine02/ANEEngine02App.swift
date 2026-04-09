@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct ANEEngine02App: App {
+    @StateObject private var store = AppStore()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
+                .environmentObject(store)
+                .preferredColorScheme(.dark)
         }
     }
 }

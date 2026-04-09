@@ -139,6 +139,8 @@ struct DetailRouter: View {
             }
         }
         .background(Color(hex: "#0A0F1A"))
+        #if os(iOS)
         .navigationBarHidden(true)
+        #endif
     }
 }

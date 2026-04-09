@@ -1,5 +1,6 @@
 // Views/Components/SharedComponents.swift
 import SwiftUI
+internal import UniformTypeIdentifiers
 
 // ─── Section Header ───────────────────────────────────────────────
 struct LabSectionHeader: View {
@@ -318,7 +319,23 @@ struct LabButton: View {
             .scaleEffect(hover ? 1.02 : 1.0)
         }
         .buttonStyle(.plain)
-        .onHover { withAnimation(.spring(duration: 0.2)) { hover = $0 } }
+        /*
+         Explain xcode error "Contextual closure type '() throws -> Void' expects 0 arguments, but 1 was used in closure body" at "hover = $0" in
+
+        What this error means
+        This error is happening because you have two nested closures, and you are using the $0 shorthand in the wrong one.
+        Let's look at the line causing the issue:
+            .onHover { _ in withAnimation(.spring(duration: 0.2)) { hover = $0 } }
+        The outer closure (onHover) gives you 1 argument: a Bool telling you whether the mouse is hovering or not. However, by typing _ in, you are explicitly throwing that argument away.
+        The inner closure (withAnimation) takes 0 arguments (() throws -> Void).
+        Inside withAnimation, you wrote hover = $0. The Swift compiler thinks $0 belongs to withAnimation. Because withAnimation expects 0 arguments, the compiler throws an error saying: "Contextual closure type '() throws -> Void' expects 0 arguments, but 1 ($0) was used."
+         */
+        // .onHover { _ in withAnimation(.spring(duration: 0.2)) { hover = $0 } }
+        .onHover { isHovering in
+            withAnimation(.spring(duration: 0.2)) {
+                hover = isHovering
+            }
+        }
         .disabled(isLoading)
     }
 }

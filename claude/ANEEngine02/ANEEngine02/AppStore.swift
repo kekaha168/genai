@@ -147,7 +147,7 @@ final class AppStore: ObservableObject {
 
         // Warm-up
         for _ in 0..<warmupCount {
-            _ = try? freshModel.prediction(from: input)
+            _ = try? await freshModel.prediction(from: input)
         }
 
         benchmarkState = .running
@@ -155,7 +155,7 @@ final class AppStore: ObservableObject {
 
         for i in 0..<iterationCount {
             let t0 = clock_gettime_nsec_np(CLOCK_UPTIME_RAW)
-            _ = try? freshModel.prediction(from: input)
+            _ = try? await freshModel.prediction(from: input)
             let t1 = clock_gettime_nsec_np(CLOCK_UPTIME_RAW)
             let ms = Double(t1 - t0) / 1_000_000
             timings.append(ms)
@@ -194,7 +194,7 @@ final class AppStore: ObservableObject {
             }
             while !Task.isCancelled {
                 let t0 = clock_gettime_nsec_np(CLOCK_UPTIME_RAW)
-                _ = try? m.prediction(from: inp)
+                _ = try? await m.prediction(from: inp)
                 let t1 = clock_gettime_nsec_np(CLOCK_UPTIME_RAW)
                 let ms = Double(t1 - t0) / 1_000_000
                 rollingLatencies.append(ms)

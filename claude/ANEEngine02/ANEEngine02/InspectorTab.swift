@@ -124,7 +124,7 @@ struct FlagRow: View {
             Image(systemName: icon)
                 .font(.system(size: 12))
                 .foregroundColor(color)
-                .frame(width: 16, paddingTop: 1)
+                .frame(minWidth: 16)
             Text(flag.message)
                 .font(.system(size: 11, design: .monospaced))
                 .foregroundColor(Color.white.opacity(0.7))
