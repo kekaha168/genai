@@ -1,5 +1,7 @@
 import SwiftUI
 
+enum StructureViewMode { case list, graph }
+
 // Cross-platform semantic background used for chips and search field
 private extension Color {
     static var appSurfaceBackground: Color {
@@ -17,7 +19,8 @@ struct StructureTabView: View {
     let structure: ModelStructureInfo
     @State private var searchText = ""
     @State private var filterDevice: ComputeDevice? = nil
-
+    @State private var viewMode: StructureViewMode = .list
+    
     var filteredLayers: [LayerInfo] {
         var items = structure.layers
         if !searchText.isEmpty {
@@ -31,7 +34,7 @@ struct StructureTabView: View {
         }
         return items
     }
-
+    
     var filteredOps: [OperationInfo] {
         var items = structure.operations
         if !searchText.isEmpty {
@@ -42,59 +45,210 @@ struct StructureTabView: View {
         }
         return items
     }
+    
+    // Only show graph toggle for nn / program structures
+    var graphSupported: Bool {
+        structure.kind == .neuralNetwork || structure.kind == .program
+    }
+    
+    //    var body: some View {
+    //        VStack(spacing: 0) {
+    //            // Search + filter bar
+    //            VStack(spacing: 8) {
+    //                HStack(spacing: 8) {
+    //                    Image(systemName: "magnifyingglass")
+    //                        .foregroundStyle(.secondary)
+    //                        .font(.system(size: 14))
+    //                    TextField("Search layers…", text: $searchText)
+    //                        .font(.system(size: 15))
+    //                    if !searchText.isEmpty {
+    //                        Button { searchText = "" } label: {
+    //                            Image(systemName: "xmark.circle.fill")
+    //                                .foregroundStyle(.secondary)
+    //                        }
+    //                    }
+    //                }
+    //                .padding(10)
+    //                .background(Color.appSurfaceBackground, in: RoundedRectangle(cornerRadius: 10))
+    //
+    //                // List / Graph toggle
+    //                if graphSupported {
+    //                    ViewModeToggle(mode: $viewMode)
+    //                }
+    //            }
+    //
+    //            // Device filter chips
+    //                ScrollView(.horizontal, showsIndicators: false) {
+    //                    HStack(spacing: 6) {
+    //                        FilterChip(label: "All", icon: "square.grid.2x2", isSelected: filterDevice == nil) {
+    //                            filterDevice = nil
+    //                        }
+    //                        ForEach([ComputeDevice.neuralEngine, .gpu, .cpu], id: \.self) { dev in
+    //                            FilterChip(label: dev.rawValue, icon: dev.icon, isSelected: filterDevice == dev) {
+    //                                filterDevice = filterDevice == dev ? nil : dev
+    //                            }
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //            .padding(.horizontal, 16)
+    //            .padding(.vertical, 10)
+    //
+    //            Divider()
+    //
+    //            switch structure.kind {
+    //            case .neuralNetwork:
+    //                LayerListView(layers: filteredLayers, total: structure.layers.count)
+    //            case .program:
+    //                OperationListView(operations: filteredOps, total: structure.operations.count)
+    //            case .pipeline:
+    //                PipelineView(stages: structure.pipelineStages)
+    //            case .unavailable:
+    //                UnavailableStructureView()
+    //            case .other:
+    //                UnavailableStructureView()
+    //            }
+    //        }
+    //    }
 
     var body: some View {
         VStack(spacing: 0) {
             // Search + filter bar
             VStack(spacing: 8) {
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundStyle(.secondary)
-                        .font(.system(size: 14))
-                    TextField("Search layers…", text: $searchText)
-                        .font(.system(size: 15))
-                    if !searchText.isEmpty {
-                        Button { searchText = "" } label: {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                }
-                .padding(10)
-                .background(Color.appSurfaceBackground, in: RoundedRectangle(cornerRadius: 10))
-
-                // Device filter chips
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 6) {
-                        FilterChip(label: "All", icon: "square.grid.2x2", isSelected: filterDevice == nil) {
-                            filterDevice = nil
-                        }
-                        ForEach([ComputeDevice.neuralEngine, .gpu, .cpu], id: \.self) { dev in
-                            FilterChip(label: dev.rawValue, icon: dev.icon, isSelected: filterDevice == dev) {
-                                filterDevice = filterDevice == dev ? nil : dev
+                HStack(spacing: 8) {
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundStyle(.secondary)
+                            .font(.system(size: 14))
+                        TextField("Search layers…", text: $searchText)
+                            .font(.system(size: 15))
+                        if !searchText.isEmpty {
+                            Button { searchText = "" } label: {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundStyle(.secondary)
                             }
                         }
                     }
+                    .padding(10)
+                    //.background(Color(.systemGray6), in: RoundedRectangle(cornerRadius: 10))
+                    .background(Color.appSurfaceBackground, in: RoundedRectangle(cornerRadius: 10))
+
+                    
+                    // List / Graph toggle
+                    if graphSupported {
+                        ViewModeToggle(mode: $viewMode)
+                    }
+                }
+                
+                // Device filter chips (hide in graph mode — graph shows all, dimmed)
+                if viewMode == .list {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 6) {
+                            FilterChip(label: "All", icon: "square.grid.2x2", isSelected: filterDevice == nil) {
+                                filterDevice = nil
+                            }
+                            ForEach([ComputeDevice.neuralEngine, .gpu, .cpu], id: \.self) { dev in
+                                FilterChip(label: dev.rawValue, icon: dev.icon, isSelected: filterDevice == dev) {
+                                    filterDevice = filterDevice == dev ? nil : dev
+                                }
+                            }
+                        }
+                    }
+                    .transition(.opacity.combined(with: .move(edge: .top)))
                 }
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
-
+            .animation(.spring(duration: 0.25), value: viewMode)
+            
             Divider()
-
-            switch structure.kind {
+            
+            // Content
+            switch viewMode {
+                case .list:
+                    listContent
+                        .transition(.asymmetric(
+                            insertion: .move(edge: .leading).combined(with: .opacity),
+                            removal:   .move(edge: .leading).combined(with: .opacity)
+                        ))
+                    
+                case .graph:
+                    ModelGraphView(
+                        structure: structure,
+                        searchText: searchText,
+                        filterDevice: filterDevice
+                    )
+                    .transition(.asymmetric(
+                        insertion: .move(edge: .trailing).combined(with: .opacity),
+                        removal:   .move(edge: .trailing).combined(with: .opacity)
+                    ))
+            }
+        }
+        .animation(.spring(duration: 0.3), value: viewMode)
+    }
+    
+    @ViewBuilder
+    private var listContent: some View {
+        switch structure.kind {
             case .neuralNetwork:
                 LayerListView(layers: filteredLayers, total: structure.layers.count)
             case .program:
                 OperationListView(operations: filteredOps, total: structure.operations.count)
             case .pipeline:
                 PipelineView(stages: structure.pipelineStages)
-            case .unavailable:
+            case .unavailable, .other:
                 UnavailableStructureView()
-            case .other:
-                UnavailableStructureView()
+        }
+    }
+}
+
+struct ViewModeToggle: View {
+    @Binding var mode: StructureViewMode
+    
+    var body: some View {
+        HStack(spacing: 0) {
+            toggleButton(icon: "list.bullet", selected: mode == .list) {
+                withAnimation(.spring(duration: 0.25)) { mode = .list }
+            }
+            Divider()
+                .frame(height: 18)
+            toggleButton(icon: "network", selected: mode == .graph) {
+                withAnimation(.spring(duration: 0.25)) { mode = .graph }
             }
         }
+        #if os(iOS)
+        .background(Color(.systemGray6), in: RoundedRectangle(cornerRadius: 8))
+        #elseif os(macOS)
+        .background(Color.appSurfaceBackground, in: RoundedRectangle(cornerRadius: 8))
+        #endif
+        .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(.quaternary, lineWidth: 0.5))
+        .fixedSize()
+    }
+    
+    private func toggleButton(icon: String, selected: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: icon)
+                .font(.system(size: 14, weight: .medium))
+                .frame(width: 36, height: 36)
+            #if os(iOS)
+                .background(
+                    selected
+                    ? Color(.systemBackground).opacity(0.9)
+                    : Color.clear,
+                    in: RoundedRectangle(cornerRadius: 7)
+                )
+            #elseif os(macOS)
+                .background(
+                    selected
+                    ? Color(NSColor.windowBackgroundColor).opacity(0.9)
+                    : Color.clear,
+                    in: RoundedRectangle(cornerRadius: 7)
+                )
+            #endif
+                .foregroundStyle(selected ? .primary : .secondary)
+        }
+        .buttonStyle(.plain)
+        .padding(2)
     }
 }
 
